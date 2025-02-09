@@ -39,7 +39,10 @@ export default function Header() {
           <Button variant="ghost" className="rounded-full text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors duration-200">
             Login
           </Button>
-          <Button className="rounded-full bg-primary hover:bg-primary/90 shadow-sm hover:shadow-md transition-all duration-200">Sign up</Button>
+
+          <Button className="rounded-full bg-primary hover:bg-primary/90 shadow-sm hover:shadow-md transition-all duration-200">
+            <Link href={"/signup"}>Sign up</Link>
+          </Button>
           <ModeToggle />
         </div>
       </div>

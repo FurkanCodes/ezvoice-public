@@ -66,28 +66,22 @@ export function MagicCard({ children, className, gradientSize = 200, gradientCol
   }, [gradientSize, mouseX, mouseY]);
 
   return (
-    <div ref={cardRef} className={cn("group relative flex size-full rounded-xl", className)}>
+    <div ref={cardRef} className={cn("group relative flex size-full rounded-xl", className)} suppressHydrationWarning>
       <div className="absolute inset-px z-10 rounded-xl bg-background" />
       <div className="relative z-30">{children}</div>
       <motion.div
+        suppressHydrationWarning
         className="pointer-events-none absolute inset-px z-10 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          background: useMotionTemplate`
-            radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px, ${gradientColor}, transparent 100%)
-          `,
-          opacity: gradientOpacity,
+          background: useMotionTemplate`radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px, ${gradientColor}, transparent 100%)`,
+          opacity: `${gradientOpacity}`,
         }}
       />
       <motion.div
+        suppressHydrationWarning
         className="pointer-events-none absolute inset-0 rounded-xl bg-border duration-300 group-hover:opacity-100"
         style={{
-          background: useMotionTemplate`
-            radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px,
-              ${gradientFrom},
-              ${gradientTo},
-              hsl(var(--border)) 100%
-            )
-          `,
+          background: useMotionTemplate`radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px,${gradientFrom},${gradientTo},hsl(var(--border)) 100%)`,
         }}
       />
     </div>
