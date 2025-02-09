@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 export default function Footer() {
+  const getFullYear = () => new Date().getFullYear();
+
   return (
     <footer className="bg-card">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
@@ -8,7 +10,7 @@ export default function Footer() {
           <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors"></Link>
         </div>
         <div className="mt-8 md:mt-0 md:order-1">
-          <p className="text-center text-base text-muted-foreground">&copy; 2023 InvoiceApp, Inc. All rights reserved.</p>
+          <p className="text-center text-base text-muted-foreground">&copy; {getFullYear()} InvoiceApp, Inc. All rights reserved.</p>
         </div>
       </div>
     </footer>
