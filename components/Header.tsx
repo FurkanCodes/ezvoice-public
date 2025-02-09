@@ -1,8 +1,6 @@
-import Link from "next/link";
-import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Github } from "lucide-react";
+import { ModeToggle } from "@/components/ui/mode-toggle";
+import Link from "next/link";
 
 export default function Header() {
   return (
