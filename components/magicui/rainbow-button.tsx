@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface RainbowButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const RainbowButton = React.forwardRef<HTMLButtonElement, RainbowButtonProps>(({ children, className, ...props }, ref) => {

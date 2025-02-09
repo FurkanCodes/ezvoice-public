@@ -60,7 +60,9 @@ export default function SignUpPage() {
       setShowVerification(true);
       setError("");
     } catch (err) {
-      setError(err.message || "Registration failed. Please try again.");
+      let message = "Unknown Error";
+      if (err instanceof Error) message = err.message;
+      setError(message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +90,9 @@ export default function SignUpPage() {
 
       router.push("/dashboard");
     } catch (err) {
-      setError(err.message || "Verification failed. Please try again.");
+      let message = "Unknown Error";
+      if (err instanceof Error) message = err.message;
+      setError(message || "Verification failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
