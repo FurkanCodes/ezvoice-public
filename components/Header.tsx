@@ -37,7 +37,7 @@ export default function Header() {
         {/* Right Section: Auth Buttons and Mode Toggle */}
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="rounded-full text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors duration-200">
-            Login
+          <Link href={"/signin"}>Login</Link>
           </Button>
 
           <Button className="rounded-full bg-primary hover:bg-primary/90 shadow-sm hover:shadow-md transition-all duration-200">

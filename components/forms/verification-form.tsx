@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { motion } from "motion/react";
 
 interface VerificationFormProps {
   code: string;
@@ -19,8 +20,17 @@ const VerificationForm = ({
   onSubmit 
 }: VerificationFormProps) => {
   return (
+    <motion.div 
+    initial={{ opacity: 0, y: -50 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+
+  >
     <form className="mt-8 space-y-6" onSubmit={onSubmit}>
       {error && <div className="text-red-500 text-center text-sm">{error}</div>}
+      <h2 className="text-center text-3xl font-extrabold text-gray-900">
+          {"Verify Your Email"}
+        </h2>
       <div className="space-y-4">
         <Input
           name="verificationCode"
@@ -51,6 +61,7 @@ const VerificationForm = ({
         </p>
       </div>
     </form>
+    </motion.div>
   );
 };
 
