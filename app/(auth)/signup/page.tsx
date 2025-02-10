@@ -1,15 +1,14 @@
 
 "use client";
-import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 
-import { usePolling } from "@/hooks/usePolling";
-import { validateEmail, validatePassword } from "@/utils/validators";
-import VerificationForm from "@/components/forms/verification-form";
 import SignupForm from "@/components/forms/signup-form";
+import VerificationForm from "@/components/forms/verification-form";
 import { useAuthService } from "@/services/useAuthService";
+import { validateEmail, validatePassword } from "@/utils/validators";
 
 
 interface VerificationState {
@@ -20,7 +19,7 @@ interface VerificationState {
 
 export default function SignUpPage() {
   const router = useRouter();
-  const { register, login, verifyEmail, startPollingVerificationStatus, stopPollingVerificationStatus } = useAuthService();
+  const { register,  verifyEmail, startPollingVerificationStatus, stopPollingVerificationStatus } = useAuthService();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -63,7 +62,7 @@ export default function SignUpPage() {
 
     try {
       setIsLoading(true);
-      const { token, refreshToken, uid } = await register({ email, password });
+      const { token, refreshToken } = await register({ email, password });
       
       localStorage.setItem("token", token);
       localStorage.setItem("refreshToken", refreshToken);
