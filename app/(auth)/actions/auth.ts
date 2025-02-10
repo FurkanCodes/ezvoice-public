@@ -14,9 +14,7 @@ interface RegisterRequest {
   password: string
 }
 
-interface VerifyEmailRequest {
-  code: string
-}
+
 
 interface VerificationStatusResponse {
   isVerified: boolean

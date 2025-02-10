@@ -97,7 +97,7 @@ export default function SignInPage() {
             whileTap={{ scale: 0.95 }}
           >
             <Link href="/signup" className="text-sm text-blue-600 hover:text-blue-800 transition-colors duration-200">
-              Don't have an account? Sign up
+              Dont have an account? Sign up
             </Link>
           </motion.div>
         </div>
