@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 
 interface VerificationFormProps {
   code: string;
-  error: any;
+  error: string;
   isLoading: boolean;
   isPolling: boolean; // Add this new prop
   onChange: (verification: { show: boolean; code: string; isPolling: boolean }) => void;

@@ -1,7 +1,6 @@
 "use client"
 import { logout } from "@/app/(auth)/actions/auth"
 import { Button } from "@/components/ui/button"
-import { useToken } from "@/hooks/useToken"
 
 const LogoutButton = () => {
 

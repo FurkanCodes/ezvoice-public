@@ -9,7 +9,7 @@ const MAX_POLLING_TIME = 300000 // 5 minutes
 export function useVerificationStatus() {
   const [isVerified, setIsVerified] = useState(false)
   const [isPolling, setIsPolling] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string>("")
   const router = useRouter()
 
   const checkVerificationStatus = useCallback(async () => {
@@ -44,7 +44,7 @@ export function useVerificationStatus() {
     if (isVerified) return // Don't start polling if already verified
 
     setIsPolling(true)
-    setError(null)
+    setError("")
   }, [isVerified])
 
   const stopPolling = useCallback(() => {

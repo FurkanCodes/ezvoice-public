@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server"
+import {  NextResponse } from "next/server"
 import { apiClient } from "@/utils/api-client"
 import { cookies } from "next/headers"
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const cookieStore = cookies()
   const token = (await cookieStore).get("token")?.value
 console.log("token",token)
