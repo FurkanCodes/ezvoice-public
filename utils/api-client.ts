@@ -4,43 +4,65 @@ import { cookies } from "next/headers";
 interface RequestConfig extends RequestInit {
   headers?: HeadersInit;
 }
-
 class ApiClient {
   private baseURL: string;
 
   constructor() {
-    // Set base URL directly
     this.baseURL = 'https://invoice-app-n6oh.onrender.com/api';
   }
 
-  private async request(endpoint: string, config: any = {}) {
-    const cookieStore = await cookies()
-    console.log("cookieStore",cookieStore)
-    const headers = new Headers(config.headers || {});
-    
+  private async getAuthHeader(): Promise<Headers> {
+    const headers = new Headers();
     headers.set('Content-Type', 'application/json');
-    // if (token) {
-    //   headers.set('Authorization', `Bearer ${token}`);
-    // }
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token");
+
+    if (token?.value) {
+      headers.set('Authorization', `Bearer ${token.value}`);
+    }
+
+    return headers;
+  }
+
+  private async request(endpoint: string, config: any = {}) {
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
-        ...config,
-        headers
-      });
+      const headers = await this.getAuthHeader();
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Request failed');
+      // Merge with any additional headers from config
+      if (config.headers) {
+        Object.entries(config.headers).forEach(([key, value]) => {
+          headers.set(key, value as string);
+        });
       }
 
-      return response.json();
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        ...config,
+        headers,
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Request failed');
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      }
+  
+      const text = await response.text();
+      if (!text) {
+        return null;
+      }
+  
+      return JSON.parse(text);
     } catch (error) {
       return Promise.reject(error);
     }
   }
 
-  // CRUD operations with proper typing
   async get<T = any>(endpoint: string, config: any = {}): Promise<T> {
     return this.request(endpoint, { ...config, method: 'GET' });
   }
@@ -49,7 +71,7 @@ class ApiClient {
     return this.request(endpoint, {
       ...config,
       method: 'POST',
-      body: JSON.stringify(data)
+      body: data ? JSON.stringify(data) : undefined
     });
   }
 
