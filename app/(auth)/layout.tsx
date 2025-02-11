@@ -8,9 +8,7 @@ export default function AuthLayout({
   }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-primary to-primary/70" >
-  
-          {children}
-      
+      {children}
     </div>
   );
 }

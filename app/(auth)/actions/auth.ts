@@ -116,20 +116,8 @@ export async function checkVerificationStatus(): Promise<VerificationStatusRespo
 export async function logout(): Promise<void> {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get("token");
-    const refreshToken = cookieStore.get("refreshToken");
-    
-    if (token?.value) {
-      try {
-        const res = await apiClient.post("/auth/logout", { refreshToken: refreshToken?.value }
-  );
-        console.log("res",res)
-      } catch (error) {
-        console.error('API logout error:', error);
-        // Continue with cookie deletion even if API call fails
-      }
-    }
-    
+
+
     // Use the same cookieStore instance
     (await cookies()).delete("token");
     (await cookies()).delete("refreshToken");

@@ -7,12 +7,12 @@ const POLLING_INTERVAL = 5000 // 5 seconds
 const MAX_POLLING_TIME = 300000 // 5 minutes
 
 export function useVerificationStatus() {
-  const [isVerified, setIsVerified] = useState(false)
-  const [isPolling, setIsPolling] = useState(false)
+  const [isVerified, setIsVerified] = useState<boolean>(false)
+  const [isPolling, setIsPolling] = useState<boolean>(false)
   const [error, setError] = useState<string>("")
   const router = useRouter()
 
-  const checkVerificationStatus = useCallback(async () => {
+  const checkVerificationStatus = useCallback(async ()=> {
     try {
       const response = await fetch('/check-verification-status', {
         method: 'GET',

@@ -2,7 +2,7 @@
 
 import { CheckCircle, Clock, DollarSign, PieChart } from "lucide-react";
 import { useTheme } from "next-themes";
-import { MagicCard } from "./magicui/magic-card";
+import { MagicCard } from "../magicui/magic-card";
 
 const features = [
   {

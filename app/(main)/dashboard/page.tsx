@@ -1,12 +1,11 @@
-"use client"
-import LogoutButton from "@/components/general/logout-button";
-import { useToken } from "@/hooks/useToken";
-import React from "react";
 
- function Page() {
-  const {token} = useToken()
-console.log("token", token)
-  return <div>DASHBOARD! <LogoutButton></LogoutButton></div>;
+import Dashboard from "@/app/(main)/dashboard/dashboard";
+
+import { cookies } from "next/headers";
+async function Page() {
+  const cookieStore = await cookies()
+  let token = cookieStore.get("token")
+  return <><Dashboard token={token}/></>
 }
 
 export default Page;

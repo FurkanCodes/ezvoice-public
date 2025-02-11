@@ -1,5 +1,5 @@
-import { AnimatedBeamDemo } from "./general/animated";
-import { HeroBoxReveal } from "./general/box-reveal";
+import { AnimatedBeamDemo } from "../general/animated";
+import { HeroBoxReveal } from "../general/box-reveal";
 
 export default function Hero() {
   return (

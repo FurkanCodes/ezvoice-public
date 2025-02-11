@@ -1,8 +1,8 @@
-import CTA from "@/components/CTA";
-import Features from "@/components/Features";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
+import CTA from "@/components/landing-page/CTA";
+import Features from "@/components/landing-page/Features";
+import Footer from "@/components/landing-page/Footer";
+import Header from "@/components/landing-page/Header";
+import Hero from "@/components/landing-page/Hero";
 
 export default function Home() {
   return (
