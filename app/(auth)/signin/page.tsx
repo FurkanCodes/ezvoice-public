@@ -6,12 +6,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useAuthService } from "@/services/useAuthService";
+
 import { validateEmail, validatePassword } from "@/utils/validators";
+import { login } from "../actions/auth";
 
 export default function SignInPage() {
   const router = useRouter();
-  const { login } = useAuthService();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,11 +27,9 @@ export default function SignInPage() {
 
     try {
       setIsLoading(true);
-      const { token, refreshToken } = await login({ email, password });
-      
-      localStorage.setItem("token", token);
-      localStorage.setItem("refreshToken", refreshToken);
-      
+      const authResponse= await login({ email, password });
+      console.log("auth,",authResponse)
+     
       router.push("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");

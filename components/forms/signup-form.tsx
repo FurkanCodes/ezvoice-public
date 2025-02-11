@@ -5,7 +5,7 @@ interface SignupFormProps {
     email: string;
     password: string;
     confirmPassword: string;
-    error: string;
+    error: any;
     isLoading: boolean;
     onEmailChange: (email: string) => void;
     onPasswordChange: (password: string) => void;

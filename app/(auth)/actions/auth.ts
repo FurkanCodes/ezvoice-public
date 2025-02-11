@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers"
 import { apiClient } from "@/utils/api-client"
+import handleAuthError from "@/utils/handle-auth-error"
 
 interface AuthResponse {
   token: string
@@ -15,43 +16,37 @@ interface RegisterRequest {
 }
 
 
-
 interface VerificationStatusResponse {
   isVerified: boolean
 }
 
-const handleAuthError = async (error: unknown, fallbackMessage: string): Promise<string> => {
-  if (error instanceof Response) {
-    try {
-      const errorData = await error.json()
-      return errorData.message || fallbackMessage
-    } catch {
-      return fallbackMessage
-    }
-  }
 
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  return fallbackMessage
-}
 
 export async function register(credentials: RegisterRequest): Promise<AuthResponse> {
+  const cookieStore = await cookies()
   try {
     const response = await apiClient.post("/auth/register", credentials)
     const authResponse: AuthResponse = response.data
-
-    // Set cookies
-    ;(await
-          // Set cookies
-          cookies()).set("token", authResponse.token, { httpOnly: true, secure: process.env.NODE_ENV === "production" })
-    ;(await cookies()).set("refreshToken", authResponse.refreshToken, {
+    cookieStore.set({
+      name: 'token',
+      value: authResponse.token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+  
     })
-    ;(await cookies()).set("uid", authResponse.uid, { httpOnly: true, secure: process.env.NODE_ENV === "production" })
+    cookieStore.set({
+      name: 'refreshToken',
+      value: authResponse.refreshToken,
+      httpOnly: true,
+  
+    })
 
+    cookieStore.set({
+      name: 'uid',
+      value: authResponse.uid,
+      httpOnly: true,
+  
+    })
+ 
     return authResponse
   } catch (error) {
     const errorMessage = await handleAuthError(error, "Registration failed")
@@ -60,20 +55,32 @@ export async function register(credentials: RegisterRequest): Promise<AuthRespon
 }
 
 export async function login(credentials: RegisterRequest): Promise<AuthResponse> {
+  const cookieStore = await cookies()
   try {
     const response = await apiClient.post("/auth/login", credentials)
+    console.log("response",response)
     const authResponse: AuthResponse = response.data
 
-    // Set cookies
-    ;(await
-          // Set cookies
-          cookies()).set("token", authResponse.token, { httpOnly: true, secure: process.env.NODE_ENV === "production" })
-    ;(await cookies()).set("refreshToken", authResponse.refreshToken, {
+    cookieStore.set({
+      name: 'token',
+      value: authResponse.token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+  
     })
-    ;(await cookies()).set("uid", authResponse.uid, { httpOnly: true, secure: process.env.NODE_ENV === "production" })
+    cookieStore.set({
+      name: 'refreshToken',
+      value: authResponse.refreshToken,
+      httpOnly: true,
+  
+    })
 
+    cookieStore.set({
+      name: 'uid',
+      value: authResponse.uid,
+      httpOnly: true,
+  
+    })
+ 
     return authResponse
   } catch (error) {
     const errorMessage = await handleAuthError(error, "Login failed")
@@ -107,8 +114,8 @@ export async function checkVerificationStatus(): Promise<VerificationStatusRespo
 }
 
 export async function logout(): Promise<void> {
-  (await cookies()).delete("token")
-  ;(await cookies()).delete("refreshToken")
-  ;(await cookies()).delete("uid")
+  (await cookies()).delete("token");
+  (await cookies()).delete("refreshToken");
+  (await cookies()).delete("uid")  ;
 }
 

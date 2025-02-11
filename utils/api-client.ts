@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+
 // src/utils/apiClient.ts
 interface RequestConfig extends RequestInit {
   headers?: HeadersInit;
@@ -12,13 +14,14 @@ class ApiClient {
   }
 
   private async request(endpoint: string, config: any = {}) {
-    const token = localStorage.getItem('token');
+    const cookieStore = await cookies()
+    console.log("cookieStore",cookieStore)
     const headers = new Headers(config.headers || {});
     
     headers.set('Content-Type', 'application/json');
-    if (token) {
-      headers.set('Authorization', `Bearer ${token}`);
-    }
+    // if (token) {
+    //   headers.set('Authorization', `Bearer ${token}`);
+    // }
 
     try {
       const response = await fetch(`${this.baseURL}${endpoint}`, {
