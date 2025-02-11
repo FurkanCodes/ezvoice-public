@@ -1,21 +1,23 @@
 
 import DashboardHeader from '@/components/dashboard/header';
-import Header from '@/components/dashboard/header';
+import Sidebar from '@/components/dashboard/sidebar/sidebar';
+
 import React from 'react';
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
       <aside className="hidden md:flex w-64 flex-col fixed h-screen border-r border-border bg-primary/5">
 
-        <div className="p-6">
+        <div className="p-6 h-screen">
           {/* Sidebar content */}
-          <nav className="space-y-2">
-            {/* Add your navigation items here */}
+          <nav className="flex flex-col h-full">
+         <Sidebar />
           </nav>
         </div>
       </aside>

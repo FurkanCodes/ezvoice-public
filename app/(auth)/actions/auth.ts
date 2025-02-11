@@ -115,7 +115,7 @@ export async function checkVerificationStatus(): Promise<VerificationStatusRespo
 
 export async function logout(): Promise<void> {
   try {
-    const cookieStore = await cookies();
+
 
 
     // Use the same cookieStore instance
