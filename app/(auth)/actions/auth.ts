@@ -33,29 +33,35 @@ export async function register(credentials: RegisterRequest): Promise<AuthRespon
   }
 }
 
-export async function login(credentials: RegisterRequest): Promise<AuthResponse> {
+export async function login(
+  prevState: AuthResponse | null, 
+  formData: FormData
+): Promise<AuthResponse> {
   const cookieStore = await cookies()
+  const credentials = {
+    email: formData.get('email'),
+    password: formData.get('password')
+  }
+
   try {
     const response = await apiClient.post("/auth/login", credentials)
-    console.log("response",response)
-
-
+    
     cookieStore.set({
       name: 'token',
-      value:  response.data?.token,
+      value: response.data?.token,
       httpOnly: true,
     })
     
     cookieStore.set({
       name: 'refreshToken',
-      value:  response.data?.refreshToken,
+      value: response.data?.refreshToken,
       httpOnly: true,
     })
 
     return response
   } catch (error) {
     const errorMessage = await handleAuthError(error, "Login failed")
-    throw new Error(errorMessage)
+   throw new Error(errorMessage)
   }
 }
 

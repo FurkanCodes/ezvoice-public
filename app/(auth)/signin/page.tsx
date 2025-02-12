@@ -1,48 +1,25 @@
 "use client";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { AnimatePresence, motion } from "framer-motion";
 import { User } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect } from "react";
 
-import { validateEmail, validatePassword } from "@/utils/validators";
-import { login } from "../actions/auth";
-import { AuthResponse } from "@/types/auth";
+import { login } from "@/app/(auth)/actions/auth";
 
 export default function SignInPage() {
+  const [state, formAction, isLoading] = useActionState(login, null);
   const router = useRouter();
+ 
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    
-    if (!validateEmail(email)) return setError("Invalid email address");
-    if (!validatePassword(password)) return setError("Invalid password");
-  
-    try {
-      setIsLoading(true);
-      const response: AuthResponse = await login({ email, password });
-      if (!response.isSuccess) {
-          setError(response?.message);
-      } else {
-  
-   router.push("/dashboard");
-      }
-  
-   
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Login failed");
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    if (state?.isSuccess) {
+      router.push("/dashboard");
     }
-  };
+  }, [state, router]);
+
 
   return (
     <motion.div 
@@ -73,26 +50,28 @@ export default function SignInPage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
                 Sign In to Your Account
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {error && <div className="text-red-500 text-sm text-center">{error}</div>}
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Signing in..." : "Sign In"}
-                </Button>
-              </form>
+              <form action={formAction} className="space-y-4">
+      {state?.message && (
+        <div className="text-red-500 text-sm text-center">
+          {state.message}
+        </div>
+      )}
+      <Input
+        type="email"
+        name="email"  // Add name attribute
+        placeholder="Email"
+        required
+      />
+      <Input
+        type="password"
+        name="password"  // Add name attribute
+        placeholder="Password"
+        required
+      />
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Signing in..." : "Sign In"}
+      </Button>
+    </form>
             </motion.div>
           </AnimatePresence>
           
