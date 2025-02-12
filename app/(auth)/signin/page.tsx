@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 
 import { validateEmail, validatePassword } from "@/utils/validators";
 import { login } from "../actions/auth";
+import { AuthResponse } from "@/types/auth";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -24,13 +25,18 @@ export default function SignInPage() {
     
     if (!validateEmail(email)) return setError("Invalid email address");
     if (!validatePassword(password)) return setError("Invalid password");
-
+  
     try {
       setIsLoading(true);
-      const authResponse= await login({ email, password });
-      console.log("auth,",authResponse)
-     
-      router.push("/dashboard");
+      const response: AuthResponse = await login({ email, password });
+      if (!response.isSuccess) {
+          setError(response?.message);
+      } else {
+  
+   router.push("/dashboard");
+      }
+  
+   
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

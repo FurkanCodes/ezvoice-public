@@ -1,8 +1,4 @@
-export interface AuthResponse {
-    token: string
-    refreshToken: string
-    uid: string
-  }
+
   
   export interface RegisterRequest {
     email: string
@@ -22,4 +18,28 @@ export interface AuthResponse {
     statusCode?: number
   }
   
+  
+  export interface AuthResponse {
+    data: null | any;
+    errors: string[];
+    isSuccess: boolean;
+    message: string;
+    statusCode: number;
+  }
+  
+  // If you need a success response type with actual data, you might want to create a separate interface:
+  export interface AuthSuccessResponse {
+    data: {
+      token: string;
+      refreshToken: string;
+      // ... any other data properties
+    };
+    errors: never[];
+    isSuccess: true;
+    message: string;
+    statusCode: 200;
+  }
+  
+  // You could also create a union type for all possible responses:
+  export type AuthResponseType = AuthSuccessResponse | AuthResponse;
   

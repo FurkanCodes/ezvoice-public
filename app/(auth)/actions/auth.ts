@@ -3,22 +3,8 @@
 import { cookies } from "next/headers"
 import { apiClient } from "@/utils/api-client"
 import handleAuthError from "@/utils/handle-auth-error"
+import { AuthResponse, RegisterRequest, VerificationStatusResponse } from "@/types/auth"
 
-interface AuthResponse {
-  token: string
-  refreshToken: string
-  uid: string
-}
-
-interface RegisterRequest {
-  email: string
-  password: string
-}
-
-
-interface VerificationStatusResponse {
-  isVerified: boolean
-}
 
 
 
@@ -29,24 +15,17 @@ export async function register(credentials: RegisterRequest): Promise<AuthRespon
     const authResponse: AuthResponse = response.data
     cookieStore.set({
       name: 'token',
-      value: authResponse.token,
+      value: response.data?.token,
       httpOnly: true,
   
     })
     cookieStore.set({
       name: 'refreshToken',
-      value: authResponse.refreshToken,
+      value: response.data?.refreshToken,
       httpOnly: true,
   
     })
 
-    cookieStore.set({
-      name: 'uid',
-      value: authResponse.uid,
-      httpOnly: true,
-  
-    })
- 
     return authResponse
   } catch (error) {
     const errorMessage = await handleAuthError(error, "Registration failed")
@@ -59,29 +38,21 @@ export async function login(credentials: RegisterRequest): Promise<AuthResponse>
   try {
     const response = await apiClient.post("/auth/login", credentials)
     console.log("response",response)
-    const authResponse: AuthResponse = response.data
+
 
     cookieStore.set({
       name: 'token',
-      value: authResponse.token,
+      value:  response.data?.token,
       httpOnly: true,
-  
     })
+    
     cookieStore.set({
       name: 'refreshToken',
-      value: authResponse.refreshToken,
+      value:  response.data?.refreshToken,
       httpOnly: true,
-  
     })
 
-    cookieStore.set({
-      name: 'uid',
-      value: authResponse.uid,
-      httpOnly: true,
-  
-    })
- 
-    return authResponse
+    return response
   } catch (error) {
     const errorMessage = await handleAuthError(error, "Login failed")
     throw new Error(errorMessage)
