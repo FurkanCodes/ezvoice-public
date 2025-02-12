@@ -1,84 +1,43 @@
 "use client"
-
-import Link from "next/link"
-import { useCallback, useState, useEffect } from "react"
+// SignUpPage.tsx
 import SignupForm from "@/components/forms/signup-form"
 import VerificationForm from "@/components/forms/verification-form"
-import { validateEmail, validatePassword } from "@/utils/validators"
+import { useVerificationStatus } from "@/hooks/useVerificationStatus"
 import { AnimatePresence, motion } from "framer-motion"
 import { User } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useActionState, useEffect, useState } from "react"
 import { register, verifyEmail } from "../actions/auth"
-import { useVerificationStatus } from "@/hooks/useVerificationStatus"
-import type React from "react"
 
-interface VerificationState {
-  show: boolean
-  code: string
-}
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [verification, setVerification] = useState<VerificationState>({
-    show: false,
-    code: "",
-  })
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const [state, formAction, isPending] = useActionState(register, null)
+  const [verifyState, verifyAction, isVerifyPending] = useActionState(verifyEmail, null);
+
   const { isPolling, error, startPolling, stopPolling, isVerified } = useVerificationStatus()
 
-  const handleValidation = useCallback(() => {
-    if (!validateEmail(email)) return "Invalid email address"
-    if (!validatePassword(password)) return "Password must be at least 8 characters"
-    if (password !== confirmPassword) return "Passwords do not match"
-    return null
-  }, [email, password, confirmPassword])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
 
-    const validationError = handleValidation()
-    if (validationError) return
 
-    try {
-      setIsLoading(true)
-      await register({ email, password })
-      setVerification((v) => ({ ...v, show: true }))
+
+console.log(verifyState)
+  useEffect(() => {
+    if (state?.requiresVerification) {
       startPolling()
-    } catch (err: unknown) {
-      console.error(err instanceof Error ? err.message : "Registration failed")
-    } finally {
-      setIsLoading(false)
     }
-  }
-
-  const handleVerification = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    try {
-      setIsLoading(true)
-      await verifyEmail(verification.code)
-      startPolling()
-    } catch (err: unknown) {
-      console.error(err instanceof Error ? err.message : "Verification failed")
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  }, [state, startPolling])
 
   useEffect(() => {
-    // Stop polling when the component unmounts or when verified
-    return () => {
-      stopPolling()
-    }
-  }, [stopPolling])
-
-  useEffect(() => {
-    // Stop polling when verified
     if (isVerified) {
-      stopPolling()
+      router.push("/dashboard")
     }
-  }, [isVerified, stopPolling])
+  }, [isVerified, router])
+
+  useEffect(() => {
+    return () => stopPolling()
+  }, [stopPolling])
 
   return (
     <motion.div
@@ -99,7 +58,7 @@ export default function SignUpPage() {
           </motion.div>
 
           <AnimatePresence mode="wait">
-            {verification.show ? (
+            {state?.requiresVerification ? (
               <motion.div
                 key="verification"
                 initial={{ opacity: 0, x: 50 }}
@@ -107,14 +66,20 @@ export default function SignUpPage() {
                 exit={{ opacity: 0, x: -50 }}
                 transition={{ duration: 0.3 }}
               >
-                <VerificationForm
-                  code={verification.code}
-                  error={error}
-                  isLoading={isLoading}
-                  onChange={setVerification}
-                  onSubmit={handleVerification}
-                  isPolling={isPolling}
-                />
+         <form className="mt-8 space-y-6" action={
+  verifyAction
+}>
+  <VerificationForm
+    error={verifyState?.error}
+    isLoading={isVerifyPending}
+    isPolling={isPolling}
+    onSubmit={(code) => {
+      const formData = new FormData();
+      formData.append('verificationCode', code);
+      verifyAction(formData);
+    }}
+  />
+</form>
               </motion.div>
             ) : (
               <motion.div
@@ -124,18 +89,15 @@ export default function SignUpPage() {
                 exit={{ opacity: 0, x: 50 }}
                 transition={{ duration: 0.3 }}
               >
-                <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Create Your Account</h2>
-                <SignupForm
-                  email={email}
-                  password={password}
-                  confirmPassword={confirmPassword}
-                  error={error}
-                  isLoading={isLoading}
-                  onEmailChange={setEmail}
-                  onPasswordChange={setPassword}
-                  onConfirmPasswordChange={setConfirmPassword}
-                  onSubmit={handleSubmit}
-                />
+                <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+                  Create Your Account
+                </h2>
+                <form action={formAction}>
+                  <SignupForm 
+                    error={state?.message} 
+                    isPending={isPending}
+                  />
+                </form>
               </motion.div>
             )}
           </AnimatePresence>
@@ -158,4 +120,3 @@ export default function SignUpPage() {
     </motion.div>
   )
 }
-

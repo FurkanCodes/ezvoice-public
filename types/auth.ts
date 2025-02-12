@@ -19,13 +19,14 @@
   }
   
   
-  export interface AuthResponse {
-    data: null | any;
-    errors: string[];
-    isSuccess: boolean;
-    message: string;
-    statusCode: number;
-  }
+export interface AuthResponse {
+  isSuccess: boolean;
+  message?: string;
+  requiresVerification?: boolean;
+  token?: string;
+  refreshToken?: string;
+  error?: string
+}
   
   // If you need a success response type with actual data, you might want to create a separate interface:
   export interface AuthSuccessResponse {

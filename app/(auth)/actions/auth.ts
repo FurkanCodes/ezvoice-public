@@ -8,28 +8,35 @@ import { AuthResponse, RegisterRequest, VerificationStatusResponse } from "@/typ
 
 
 
-export async function register(credentials: RegisterRequest): Promise<AuthResponse> {
+export async function register(
+  prevState: AuthResponse | null, 
+  formData: FormData
+): Promise<AuthResponse> {
   const cookieStore = await cookies()
+  const credentials = {
+    email: formData.get('email'),
+    password: formData.get('password')
+  }
+
   try {
     const response = await apiClient.post("/auth/register", credentials)
-    const authResponse: AuthResponse = response.data
+    
     cookieStore.set({
       name: 'token',
       value: response.data?.token,
       httpOnly: true,
-  
     })
+    
     cookieStore.set({
       name: 'refreshToken',
       value: response.data?.refreshToken,
       httpOnly: true,
-  
     })
 
-    return authResponse
+    return {...response, requiresVerification:true}
   } catch (error) {
-    const errorMessage = await handleAuthError(error, "Registration failed")
-    throw new Error(errorMessage)
+    const errorMessage = await handleAuthError(error, "Login failed")
+   throw new Error(errorMessage)
   }
 }
 
@@ -65,21 +72,34 @@ export async function login(
   }
 }
 
-export async function verifyEmail(code: string): Promise<void> {
+
+export async function verifyEmail(
+  prevState: AuthResponse | null, 
+  formData: FormData
+): Promise<AuthResponse> {
+  const cookieStore = await cookies()
+  let code = formData.get('verificationCode') as string;
+  if (!code) {
+    throw new Error("Verification code is required");
+  }
   try {
-    await apiClient.post(
+    //todo, verification not working
+    const response = await apiClient.post(
       "/auth/verify-email-with-code",
       { code },
       {
-        params: { code },
-      },
-    )
+        // Remove the params object
+      }
+    );
+    
+   
+
+    return response
   } catch (error) {
-    const errorMessage = await handleAuthError(error, "Email verification failed")
-    throw new Error(errorMessage)
+    const errorMessage = await handleAuthError(error, "Login failed")
+   throw new Error(errorMessage)
   }
 }
-
 export async function checkVerificationStatus(): Promise<VerificationStatusResponse> {
   try {
     const response = await apiClient.get("/auth/verification-status")
