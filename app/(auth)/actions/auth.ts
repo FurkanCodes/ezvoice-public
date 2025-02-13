@@ -19,6 +19,7 @@ export async function register(
 
   try {
     const response = await apiClient.post("/auth/register", credentials)
+    console.log("response",response)
     
     if (!response?.isSuccess) {
       return { 

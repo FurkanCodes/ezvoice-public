@@ -1,6 +1,6 @@
 const SidebarFooter = () =>{
 
-    return <div className="border p-4">Sidebar Footer</div>
+    return <div className=" p-4">Sidebar Footer</div>
 }
 
 export default  SidebarFooter;
