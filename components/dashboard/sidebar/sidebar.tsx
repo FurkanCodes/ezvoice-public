@@ -1,10 +1,9 @@
 // Sidebar.tsx (main component stays mostly the same)
 "use client"
-import { useState, useEffect } from "react";
-import SidebarContent from "./sidebar-content";
-import SidebarFooter from "./sidebar-footer";
-import SidebarHeader from "./sidebar-header";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import SidebarContent from "./sidebar-content";
+import SidebarHeader from "./sidebar-header";
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState<boolean>(false);

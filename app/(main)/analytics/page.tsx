@@ -1,5 +1,4 @@
 
-import Dashboard from "@/app/(main)/dashboard/dashboard";
 
 
 async function Page() {
