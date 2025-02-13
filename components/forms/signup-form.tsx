@@ -1,11 +1,11 @@
+// SignupForm.tsx (unchanged from your original)
 "use client"
-// SignupForm.tsx
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 interface SignupFormProps {
-  error?: string;
-  isPending: boolean;
+  error?: string
+  isPending: boolean
 }
 
 const SignupForm = ({ error, isPending }: SignupFormProps) => {
@@ -40,7 +40,7 @@ const SignupForm = ({ error, isPending }: SignupFormProps) => {
         {isPending ? "Creating account..." : "Sign up"}
       </Button>
     </div>
-  );
-};
+  )
+}
 
-export default SignupForm;
+export default SignupForm

@@ -19,8 +19,8 @@ export function useVerificationStatus() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // This ensures cookies are sent with the request
-      })
+   
+      },)
 
       if (!response.ok) {
         throw new Error('Verification check failed')

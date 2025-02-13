@@ -35,7 +35,7 @@ class ApiClient {
           headers.set(key, value as string);
         });
       }
-
+console.log("config",config)
       const response = await fetch(`${this.baseURL}${endpoint}`, {
         ...config,
         headers,
@@ -64,7 +64,7 @@ class ApiClient {
     return this.request(endpoint, {
       ...config,
       method: 'POST',
-      body: data ? JSON.stringify(data) : undefined
+      body: typeof data === 'string' ? data : JSON.stringify(data)
     });
   }
 

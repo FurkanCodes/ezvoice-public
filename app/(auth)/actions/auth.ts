@@ -7,36 +7,37 @@ import { AuthResponse, RegisterRequest, VerificationStatusResponse } from "@/typ
 
 
 
-
 export async function register(
-  prevState: AuthResponse | null, 
+  prevState: any,
   formData: FormData
-): Promise<AuthResponse> {
-  const cookieStore = await cookies()
+): Promise<any> {
+  const cookieStore = await cookies();
   const credentials = {
-    email: formData.get('email'),
+    email: formData.get('email') as string,
     password: formData.get('password')
   }
 
   try {
     const response = await apiClient.post("/auth/register", credentials)
     
-    cookieStore.set({
-      name: 'token',
-      value: response.data?.token,
-      httpOnly: true,
-    })
-    
-    cookieStore.set({
-      name: 'refreshToken',
-      value: response.data?.refreshToken,
-      httpOnly: true,
-    })
+    if (!response?.isSuccess) {
+      return { 
+        message: response?.message || "Registration failed",
+        requiresVerification: false 
+      }
+    }
+    cookieStore.set('email', credentials.email)
+    return {
+      message: "Verification required - check your email",
+      requiresVerification: true
+    }
 
-    return {...response, requiresVerification:true}
   } catch (error) {
-    const errorMessage = await handleAuthError(error, "Login failed")
-   throw new Error(errorMessage)
+    const errorMessage = await handleAuthError(error, "Registration failed")
+    return { 
+      message: errorMessage,
+      requiresVerification: false 
+    }
   }
 }
 
@@ -72,32 +73,35 @@ export async function login(
   }
 }
 
-
 export async function verifyEmail(
-  prevState: AuthResponse | null, 
+  prevState: any,
   formData: FormData
-): Promise<AuthResponse> {
+): Promise<any> {
   const cookieStore = await cookies()
-  let code = formData.get('verificationCode') as string;
-  if (!code) {
-    throw new Error("Verification code is required");
-  }
-  try {
-    //todo, verification not working
-    const response = await apiClient.post(
-      "/auth/verify-email-with-code",
-      { code },
-      {
-        // Remove the params object
-      }
-    );
-    
-   
+  const code = formData.get('verificationCode')
 
-    return response
+  try {
+    const response = await apiClient.post("/auth/verify-email-with-code", { code })
+    console.log("responseresponseresponse",response)
+    if (response?.isSuccess) {
+      cookieStore.set({
+        name: 'token',
+        value: response.data?.token,
+        httpOnly: true,
+      })
+      
+      cookieStore.set({
+        name: 'refreshToken',
+        value: response.data?.refreshToken,
+        httpOnly: true,
+      })
+    }
+
+    return { success: response?.isSuccess }
+
   } catch (error) {
-    const errorMessage = await handleAuthError(error, "Login failed")
-   throw new Error(errorMessage)
+    const errorMessage = await handleAuthError(error, "Verification failed")
+    return { message: errorMessage, success: false }
   }
 }
 export async function checkVerificationStatus(): Promise<VerificationStatusResponse> {
