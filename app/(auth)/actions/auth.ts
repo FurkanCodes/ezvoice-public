@@ -3,14 +3,14 @@
 import { cookies } from "next/headers"
 import { apiClient } from "@/utils/api-client"
 import handleAuthError from "@/utils/handle-auth-error"
-import { AuthResponse, RegisterRequest, VerificationStatusResponse } from "@/types/auth"
+import { AuthRegisterResponse, AuthResponse, VerificationStatusResponse, VerifyEmailResponse } from "@/types/auth"
 
 
 
 export async function register(
-  prevState: any,
+  prevState: AuthRegisterResponse | null,
   formData: FormData
-): Promise<any> {
+): Promise<AuthRegisterResponse> {
   const cookieStore = await cookies();
   const credentials = {
     email: formData.get('email') as string,
@@ -74,9 +74,9 @@ export async function login(
 }
 
 export async function verifyEmail(
-  prevState: any,
+  prevState: VerifyEmailResponse |null,
   formData: FormData
-): Promise<any> {
+): Promise<VerifyEmailResponse> {
   const cookieStore = await cookies()
   const code = formData.get('verificationCode')
 
@@ -97,7 +97,7 @@ export async function verifyEmail(
       })
     }
 
-    return { success: response?.isSuccess }
+    return { success: response?.isSuccess, message: "Verification done" }
 
   } catch (error) {
     const errorMessage = await handleAuthError(error, "Verification failed")

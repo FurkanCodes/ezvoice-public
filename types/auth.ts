@@ -27,8 +27,15 @@ export interface AuthResponse {
   refreshToken?: string;
   error?: string
 }
+
+export interface AuthRegisterResponse {
+  message: string
+  requiresVerification: boolean 
+}
   
-  // If you need a success response type with actual data, you might want to create a separate interface:
+export interface VerifyEmailResponse      { success: boolean, message: string}
+  
+ 
   export interface AuthSuccessResponse {
     data: {
       token: string;

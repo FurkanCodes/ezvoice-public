@@ -1,8 +1,5 @@
 // VerificationForm.tsx
 "use client"
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 
 interface VerificationFormProps {
   error?: string
@@ -13,7 +10,7 @@ interface VerificationFormProps {
 
 const VerificationForm = ({
   error,
-  isLoading,
+
   isPolling,
 
 }: VerificationFormProps) => {

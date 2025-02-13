@@ -70,7 +70,7 @@ export default function SignUpPage() {
                 >
                   <form className="mt-8 space-y-6" action={verifyAction}>
                     <VerificationForm
-                      error={verifyState?.error}
+                      error={verifyState?.message}
                       isLoading={isVerifyPending}
                       isPolling={isPolling}
                     
@@ -108,7 +108,7 @@ export default function SignUpPage() {
                     <p className="mt-2 font-semibold">Check your email!</p>
                   </div>
                   <p className="text-gray-600">
-                    We've sent a verification link to your email address.
+                    We`ve sent a verification link to your email address.
                     <br />
                     You can also verify using the code from the email.
                   </p>
