@@ -59,12 +59,17 @@ export async function login(
       name: 'token',
       value: response.data?.token,
       httpOnly: true,
+    
+      sameSite: 'lax',
+      path: '/',
     })
     
     cookieStore.set({
       name: 'refreshToken',
       value: response.data?.refreshToken,
       httpOnly: true,
+      sameSite: 'lax',
+      path: '/',
     })
 
     return response
