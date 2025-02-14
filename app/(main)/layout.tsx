@@ -31,7 +31,9 @@ export default function MainLayout({
         </header>
         {/* Main content area */}
         <main className="pt-16 px-4 md:px-8 min-h-screen">
+        <div className="p-6 space-y-6">
           {children}
+          </div>
         </main>
       </div>
     </div>

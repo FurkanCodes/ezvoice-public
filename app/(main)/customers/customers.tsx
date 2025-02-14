@@ -3,16 +3,16 @@
 import Card from "@/components/general/card";
 import Header from "@/components/general/header";
 import React from "react";
-function Dashboard() {
+function Customers() {
   return (
    <>
    
-      <Header title={"Overview"} subtitle={"Your daily analytics and statistics"} ></Header>
+      <Header title={"Customers"} subtitle={"Your Customers"} ></Header>
       {/* Add your dashboard content here */}
-     <Card title={"Stats"} >Hey</Card>
+     <Card title={"Customers"} >Hey</Card>
       </>
   );
 }
 
 
-export default Dashboard;
+export default Customers;

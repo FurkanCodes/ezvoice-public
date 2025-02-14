@@ -8,25 +8,16 @@ const appConfig = [
         path: "/dashboard"
     },
     {
-        title: "Analytics",
-        icon: "📈",
-        path: "/analytics"
+        title: "Customers",
+         icon: "💬",
+        path: "/customers"
     },
     {
-        title: "Projects",
+        title: "Invoices",
         icon: "📁",
-        path: "/projects"
+        path: "/invoices"
     },
-    {
-        title: "Messages",
-        icon: "💬",
-        path: "/messages"
-    },
-    {
-        title: "Settings",
-        icon: "⚙️",
-        path: "/settings"
-    }
+  
 ];
 
 const SidebarContent = ({ isCollapsed }: { isCollapsed: boolean }) => {
