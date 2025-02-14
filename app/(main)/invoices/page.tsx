@@ -1,4 +1,3 @@
-import Header from "@/components/general/header";
 import Invoices from "./invoices";
 
 
